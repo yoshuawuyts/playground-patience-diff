@@ -42,7 +42,7 @@ module.exports = class Patience {
   }
 
   diff (slice) {
-    var match = patienceSort(uniqueMatchingLines(slice))
+    var match = patienceSort(this.uniqueMatchingLines(slice))
     if (!match) return fallback(slice)
 
     var lines = []
