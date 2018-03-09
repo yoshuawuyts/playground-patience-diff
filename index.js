@@ -64,8 +64,8 @@ module.exports = class Patience {
       var head = []
       var tail = []
 
-      this.matchHead(subslice, (edit) => { head = head + [edit] })
-      this.matchTail(subslice, (edit) => { tail = [edit] + tail })
+      this.matchHead(subslice, (edit) => { head = head.concat(edit) })
+      this.matchTail(subslice, (edit) => { tail = [edit].concat(tail) })
 
       lines.concat(head, this.diff(subslice), tail)
       if (!match) return lines
