@@ -1,0 +1,19 @@
+{
+  "name": "playground-patience-diff",
+  "description": "Convert the Ruby patience diff algo into javascript",
+  "repository": "yoshuawuyts/playground-patience-diff",
+  "version": "1.0.0",
+  "scripts": {
+    "deps": "dependency-check . && dependency-check . --extra --no-dev",
+    "start": "node .",
+    "test": "standard && npm run deps"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "dependency-check": "^3.1.0",
+    "standard": "^11.0.0",
+    "tape": "^4.9.0"
+  },
+  "keywords": [],
+  "license": "Apache-2.0"
+}
