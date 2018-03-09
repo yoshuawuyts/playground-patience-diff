@@ -1,3 +1,11 @@
+class DiffEdit {
+  constructor (type, oldLine, newLine) {
+    this.type = type
+    this.oldLine = oldLine
+    this.newLine = newLine
+  }
+}
+
 class Slice {
   constructor (aLow, aHigh, bLow, bHigh) {
     this.aLow = aLow
@@ -16,6 +24,28 @@ class Slice {
 
   notEmpty () {
     return this.aLow < this.aHigh && this.bLow < this.bHigh
+  }
+}
+
+// JavaScript doesn't have a hash map like Ruby does,
+// we want to create fancy values when we insert a key.
+// This is some custom code we had to port.
+class Hashmap {
+  constructor () {
+    this.state = {}
+  }
+
+  get (key) {
+    var val = this.state[key]
+    if (!val) {
+      this.set(key)
+      val = this.state[key]
+    }
+    return val
+  }
+
+  set (key) {
+    this.state[key] = [0, 0, null, null]
   }
 }
 
@@ -126,14 +156,6 @@ module.exports = class Patience {
   }
 }
 
-class DiffEdit {
-  constructor (type, oldLine, newLine) {
-    this.type = type
-    this.oldLine = oldLine
-    this.newLine = newLine
-  }
-}
-
 function patienceSort (matches) {
   var stacks = []
   matches.forEach(match => {
@@ -171,26 +193,4 @@ function binarySearch (stacks, match) {
 
 function fallback () {
   throw new Error('falling back, uh oh')
-}
-
-// JavaScript doesn't have a hash map like Ruby does,
-// we want to create fancy values when we insert a key.
-// This is some custom code we had to port.
-class Hashmap {
-  constructor () {
-    this.state = {}
-  }
-
-  get (key) {
-    var val = this.state[key]
-    if (!val) {
-      this.set(key)
-      val = this.state[key]
-    }
-    return val
-  }
-
-  set (key) {
-    this.state[key] = [0, 0, null, null]
-  }
 }
