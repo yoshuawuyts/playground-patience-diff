@@ -89,6 +89,10 @@ module.exports = class Patience {
 
       lines = lines.concat(head, this.diff(subslice), tail)
       if (!match) return lines
+
+      aLine = match.aLine + 1
+      bLine = match.bLine + 1
+      match = match.next
     }
   }
 
