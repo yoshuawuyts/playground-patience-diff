@@ -63,7 +63,7 @@ module.exports = class Patience {
 
   diff (slice) {
     var match = patienceSort(this.uniqueMatchingLines(slice))
-    if (!match) return fallback(slice)
+    if (!match) return this.fallbackDiff(slice)
 
     var lines = []
     var aLine = slice.aLow
@@ -94,6 +94,13 @@ module.exports = class Patience {
       bLine = match.bLine + 1
       match = match.next
     }
+  }
+
+  fallbackDiff (slice) {
+    return this.fallback.diff(
+      this.a.slice(slice.aLow, slice.aHigh),
+      this.b.slice(slice.bLow, slice.bHigh)
+    )
   }
 
   uniqueMatchingLines (slice) {
@@ -183,8 +190,4 @@ function binarySearch (stacks, match) {
   }
 
   return low
-}
-
-function fallback () {
-  throw new Error('falling back, uh oh')
 }
