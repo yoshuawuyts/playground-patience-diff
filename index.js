@@ -29,15 +29,13 @@ class Hashmap {
 
   get (key) {
     var val = this.state[key]
-    if (!val) {
-      this.set(key)
-      val = this.state[key]
-    }
-    return val
+    if (val) return val
+
+    return this.set(key, [0, 0, null, null])
   }
 
-  set (key) {
-    this.state[key] = [0, 0, null, null]
+  set (key, value) {
+    return this.state[key] = value
   }
 }
 
@@ -156,7 +154,7 @@ function patienceSort (matches) {
     stacks[i + 1] = match
   })
 
-  var match = stacks.last
+  var match = stacks[stacks.length - 1]
   if (!match) return null
 
   while (match.prev) {
