@@ -14,14 +14,6 @@ class Slice {
     this.bHigh = bHigh
   }
 
-  aRange () {
-    return [this.aLow, this.aHigh]
-  }
-
-  bRange () {
-    return [this.bLow, this.bHigh]
-  }
-
   notEmpty () {
     return this.aLow < this.aHigh && this.bLow < this.bHigh
   }
@@ -105,14 +97,14 @@ module.exports = class Patience {
   uniqueMatchingLines (slice) {
     var counts = new Hashmap()
 
-    for (let n = slice.aRange[0]; n < slice.aRange[1]; n++) {
+    for (let n = slice.aLow; n < slice.aHigh; n++) {
       let text = this.a[n].text
       let count = counts.get(text)
       count[0] = count[0] + 1
       count[2] = count[2] || n
     }
 
-    for (let n = slice.bRange[0]; n < slice.bRange[1]; n++) {
+    for (let n = slice.bLow; n < slice.bHigh; n++) {
       let text = this.a[n].text
       let count = counts.get(text)
       count[0] = count[0] + 1
