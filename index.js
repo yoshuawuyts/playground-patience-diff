@@ -97,7 +97,7 @@ module.exports = class Patience {
   }
 
   fallbackDiff (slice) {
-    return this.fallback.diff(
+    return this.fallback(
       this.a.slice(slice.aLow, slice.aHigh),
       this.b.slice(slice.bLow, slice.bHigh)
     )
