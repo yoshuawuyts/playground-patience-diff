@@ -29,15 +29,13 @@ class Hashmap {
 
   get (key) {
     var val = this.state[key]
-    if (!val) {
-      this.set(key)
-      val = this.state[key]
-    }
-    return val
+    if (val) return val
+
+    return this.set(key, [0, 0, null, null])
   }
 
-  set (key) {
-    this.state[key] = [0, 0, null, null]
+  set (key, value) {
+    return this.state[key] = value
   }
 }
 
@@ -65,7 +63,7 @@ module.exports = class Patience {
 
   diff (slice) {
     var match = patienceSort(this.uniqueMatchingLines(slice))
-    if (!match) return fallback(slice)
+    if (!match) return this.fallbackDiff(slice)
 
     var lines = []
     var aLine = slice.aLow
@@ -89,9 +87,20 @@ module.exports = class Patience {
       this.matchHead(subslice, (edit) => { head = head.concat(edit) })
       this.matchTail(subslice, (edit) => { tail = [edit].concat(tail) })
 
-      lines.concat(head, this.diff(subslice), tail)
+      lines = lines.concat(head, this.diff(subslice), tail)
       if (!match) return lines
+
+      aLine = match.aLine + 1
+      bLine = match.bLine + 1
+      match = match.next
     }
+  }
+
+  fallbackDiff (slice) {
+    return this.fallback(
+      this.a.slice(slice.aLow, slice.aHigh),
+      this.b.slice(slice.bLow, slice.bHigh)
+    )
   }
 
   uniqueMatchingLines (slice) {
@@ -156,7 +165,7 @@ function patienceSort (matches) {
     stacks[i + 1] = match
   })
 
-  var match = stacks.last
+  var match = stacks[stacks.length - 1]
   if (!match) return null
 
   while (match.prev) {
@@ -181,8 +190,4 @@ function binarySearch (stacks, match) {
   }
 
   return low
-}
-
-function fallback () {
-  throw new Error('falling back, uh oh')
 }
