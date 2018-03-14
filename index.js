@@ -14,14 +14,6 @@ class Slice {
     this.bHigh = bHigh
   }
 
-  aRange () {
-    return [this.aLow, this.aHigh]
-  }
-
-  bRange () {
-    return [this.bLow, this.bHigh]
-  }
-
   notEmpty () {
     return this.aLow < this.aHigh && this.bLow < this.bHigh
   }
@@ -105,23 +97,23 @@ module.exports = class Patience {
   uniqueMatchingLines (slice) {
     var counts = new Hashmap()
 
-    for (let n = slice.aRange[0]; n < slice.aRange[1]; n++) {
-      let text = this.a[n].text
-      let count = counts.get(text)
+    for (let n = slice.aLow; n < slice.aHigh; n++) {
+      let value = this.a[n]
+      let count = counts.get(value)
       count[0] = count[0] + 1
       count[2] = count[2] || n
     }
 
-    for (let n = slice.bRange[0]; n < slice.bRange[1]; n++) {
-      let text = this.a[n].text
-      let count = counts.get(text)
-      count[0] = count[0] + 1
-      count[2] = count[2] || n
+    for (let n = slice.bLow; n < slice.bHigh; n++) {
+      let value = this.b[n]
+      let count = counts.get(value)
+      count[1] = count[1] + 1
+      count[3] = count[3] || n
     }
 
     var _counts = []
-    Object.keys(counts.state).forEach((text) => {
-      var count = counts.get(text)
+    Object.keys(counts.state).forEach((value) => {
+      var count = counts.get(value)
       if (count[0] === 1 && count[1] === 1) {
         _counts.push(count)
       }
@@ -137,7 +129,7 @@ module.exports = class Patience {
 
   matchHead (slice, cb) {
     while (slice.length &&
-      this.a[slice.aLow].text === this.b[slice.bLow].text) {
+      this.a[slice.aLow] === this.b[slice.bLow]) {
       var edit = new DiffEdit('equal', this.a[slice.aLow], this.b[slice.bLow])
       cb(edit)
       slice.aLow += 1
@@ -147,7 +139,7 @@ module.exports = class Patience {
 
   matchTail (slice, cb) {
     while (slice.length &&
-      this.a[slice.aHigh - 1].text === this.b[slice.bHigh - 1].text) {
+      this.a[slice.aHigh - 1] === this.b[slice.bHigh - 1]) {
       slice.aHigh += 1
       slice.bHigh += 1
       var edit = new DiffEdit('equal', this.a[slice.aHigh], this.b[slice.bHigh])
@@ -180,7 +172,7 @@ function binarySearch (stacks, match) {
   var high = stacks.length
 
   while (low + 1 < high) {
-    let mid = (low + high) / 2
+    let mid = Math.floor((low + high) / 2)
     if (stacks[mid].bLine < match.bLine) {
       low = mid
     } else {
